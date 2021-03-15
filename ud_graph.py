@@ -129,10 +129,17 @@ class UndirectedGraph:
         """
 
         edge_list = []
+        checked_vertices = set()
 
         for vertex in self.adj_list:
             for index in self.adj_list[vertex]:
-                edge_list.append((vertex, index))
+
+                if index not in checked_vertices:
+                    checked_vertices.add(vertex)
+
+                    edge_list.append((vertex, index))
+
+                continue
 
         return edge_list
 
@@ -140,6 +147,12 @@ class UndirectedGraph:
         """
         Return true if provided path is valid, False otherwise
         """
+        if path.length() == 0:
+            return True
+
+        # for vertex in path:
+        #     if vertex
+        #
 
     def dfs(self, v_start, v_end=None) -> []:
         """
