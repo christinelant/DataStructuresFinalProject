@@ -44,15 +44,7 @@ class UndirectedGraph:
 
     # ------------------------------------------------------------------ #
 
-    def add_vertex(self, v: str) -> None:
-        """
-        Add new vertex to the graph
-        """
-        
-    def add_edge(self, u: str, v: str) -> None:
-        """
-        Add edge to the graph
-        """
+    https: // github.com / christinelant / CS261 - HW6
         
 
     def remove_edge(self, v: str, u: str) -> None:
