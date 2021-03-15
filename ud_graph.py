@@ -150,9 +150,18 @@ class UndirectedGraph:
         if path.length() == 0:
             return True
 
-        # for vertex in path:
-        #     if vertex
-        #
+        for index in range(0, path.length()):
+            for edge in self.adj_list[index]:
+                if path[index + 1] > path.length():
+                    return True
+
+                if edge == path[index+1]:
+                    continue
+
+                else:
+                    return False
+
+
 
     def dfs(self, v_start, v_end=None) -> []:
         """
