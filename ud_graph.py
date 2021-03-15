@@ -61,13 +61,13 @@ class UndirectedGraph:
         if u == v:
             return
 
-        # key v is not within the graph
-        if v not in self.adj_list:
-            self.add_vertex(v)
-
         # key u is not within the graph
         if u not in self.adj_list:
             self.add_vertex(u)
+
+        # key v is not within the graph
+        if v not in self.adj_list:
+            self.add_vertex(v)
 
         # append edges into the graph
         self.adj_list[v].append(u)
