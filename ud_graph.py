@@ -44,7 +44,35 @@ class UndirectedGraph:
 
     # ------------------------------------------------------------------ #
 
-    https: // github.com / christinelant / CS261 - HW6
+    def add_vertex(self, v: str) -> None:
+        """
+        Add new vertex to the graph
+        """
+        if v in self.adj_list:
+            return
+        else:
+            self.adj_list[v] = []
+
+    def add_edge(self, u: str, v: str) -> None:
+        """
+        Add edge to the graph
+        """
+
+        # u and v point to same vertex or u and v already have an edge between one another
+        if u == v or u in self.adj_list[v]:
+            return
+
+        # key v is not within the graph
+        if v not in self.adj_list:
+            self.add_vertex(v)
+
+        # key u is not within the graph
+        if u not in self.adj_list:
+            self.add_vertex(u)
+
+        # append edges into the graph
+        self.adj_list[v].append(u)
+        self.adj_list[u].append(v)
         
 
     def remove_edge(self, v: str, u: str) -> None:
