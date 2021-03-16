@@ -147,21 +147,52 @@ class UndirectedGraph:
         """
         Return true if provided path is valid, False otherwise
         """
-        if path.length() == 0:
+
+        # empty list is automatically true
+        if len(path) == 0:
             return True
 
-        for index in range(0, path.length()):
-            for edge in self.adj_list[index]:
-                if path[index + 1] > path.length():
-                    return True
+        # grab the first value
+        prev_val = path[0]
 
-                if edge == path[index+1]:
-                    continue
+        # check if the first value is within the self.adj_list before moving on
+        if prev_val not in self.adj_list:
+            return False
 
-                else:
+        # length of path is one
+        if len(path) == 1 and prev_val in self.adj_list:
+            return True
+
+        # start the counter and grab the next value
+        counter = 1
+        next_val = path[counter]
+
+        for key in path:
+
+            # store the length of the key's edges
+            length_of_edges = len(self.adj_list[key]) - 1
+
+            # grab the specified key's values
+            for value in self.adj_list[key]:
+
+                # match is found
+                if value == next_val:
+                    break
+
+                # we have reached the end of the array
+                if length_of_edges == 0:
                     return False
 
+                # decrement length of edges
+                length_of_edges -= 1
 
+            # have not yet reached the last key -- increment counter and grab the next value
+            # as to check for value as an edge of our next key within path
+            if counter + 1 < len(path):
+                counter += 1
+                next_val = path[counter]
+            else:
+                return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -214,19 +245,19 @@ if __name__ == '__main__':
     # g.remove_vertex('D')
     # print(g)
 
-    print("\nPDF - method get_vertices() / get_edges() example 1")
-    print("---------------------------------------------------")
-    g = UndirectedGraph()
-    print(g.get_edges(), g.get_vertices(), sep='\n')
-    g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
-    print(g.get_edges(), g.get_vertices(), sep='\n')
+    # print("\nPDF - method get_vertices() / get_edges() example 1")
+    # print("---------------------------------------------------")
+    # g = UndirectedGraph()
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
+    # g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE'])
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
 
-    # print("\nPDF - method is_valid_path() example 1")
-    # print("--------------------------------------")
-    # g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
-    # test_cases = ['ABC', 'ADE', 'ECABDCBE', 'ACDECB', '', 'D', 'Z']
-    # for path in test_cases:
-    #     print(list(path), g.is_valid_path(list(path)))
+    print("\nPDF - method is_valid_path() example 1")
+    print("--------------------------------------")
+    g = UndirectedGraph(['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE'])
+    test_cases = ['ABC', 'ADE', 'ECABDCBE', 'ACDECB', '', 'D', 'Z']
+    for path in test_cases:
+        print(list(path), g.is_valid_path(list(path)))
 
     # print("\nPDF - method dfs() and bfs() example 1")
     # print("--------------------------------------")
