@@ -6,6 +6,9 @@
 #              etc.
 #
 
+import heapq
+from collections import deque
+
 
 class UndirectedGraph:
     """
@@ -202,11 +205,50 @@ class UndirectedGraph:
         Vertices are picked in alphabetical order
         """
 
+        #initiate empty set and two empty lists
+        visited = set()
+        check_these_vertices = [v_start]
+        output_list = []
+
+        # element is not within graph
+        if v_start not in self.adj_list:
+            return output_list
+
+        # check_these_vertices is not empty
+        while check_these_vertices:
+            key = check_these_vertices.pop()
+
+            # values exist within key and key is not yet in visited
+            if len(self.adj_list[key]) > 0 and key not in visited:
+                key_edges = self.adj_list[key]
+
+                # sort the key's values in lexiographical order and reverse the order
+                key_edges.sort()
+                key_edges.reverse()
+
+                # add this list onto the check_these_vertices list
+                check_these_vertices.extend(key_edges)
+
+            # add key to visited set and append it to the output list
+            if key not in visited:
+                visited.add(key)
+                output_list.append(key)
+
+            # if v_end exists and v_end is in visited, return output_list
+            if v_end and v_end in visited:
+                return output_list
+
+        return output_list
+
+
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
+        empty_list = []
+
+        return empty_list
 
     def count_connected_components(self):
         """
@@ -220,21 +262,21 @@ class UndirectedGraph:
 
 
 if __name__ == '__main__':
-    print("\nPDF - method add_vertex() / add_edge example 1")
-    print("----------------------------------------------")
-    g = UndirectedGraph()
-    print(g)
-
-    for v in 'ABCDE':
-        g.add_vertex(v)
-    print(g)
-
-    g.add_vertex('A')
-    print(g)
-
-    for u, v in ['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE', ('B', 'C')]:
-        g.add_edge(u, v)
-    print(g)
+    # print("\nPDF - method add_vertex() / add_edge example 1")
+    # print("----------------------------------------------")
+    # g = UndirectedGraph()
+    # print(g)
+    #
+    # for v in 'ABCDE':
+    #     g.add_vertex(v)
+    # print(g)
+    #
+    # g.add_vertex('A')
+    # print(g)
+    #
+    # for u, v in ['AB', 'AC', 'BC', 'BD', 'CD', 'CE', 'DE', ('B', 'C')]:
+    #     g.add_edge(u, v)
+    # print(g)
 
     # print("\nPDF - method remove_edge() / remove_vertex example 1")
     # print("----------------------------------------------------")
@@ -271,17 +313,17 @@ if __name__ == '__main__':
     # for path in test_cases:
     #     print(list(path), g.is_valid_path(list(path)))
 
-    # print("\nPDF - method dfs() and bfs() example 1")
-    # print("--------------------------------------")
-    # edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
-    # g = UndirectedGraph(edges)
-    # test_cases = 'ABCDEGH'
-    # for case in test_cases:
-    #     print(f'{case} DFS:{g.dfs(case)} BFS:{g.bfs(case)}')
-    # print('-----')
-    # for i in range(1, len(test_cases)):
-    #     v1, v2 = test_cases[i], test_cases[-1 - i]
-    #     print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
+    print("\nPDF - method dfs() and bfs() example 1")
+    print("--------------------------------------")
+    edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
+    g = UndirectedGraph(edges)
+    test_cases = 'ABCDEGH'
+    for case in test_cases:
+        print(f'{case} DFS:{g.dfs(case)} BFS:{g.bfs(case)}')
+    print('-----')
+    for i in range(1, len(test_cases)):
+        v1, v2 = test_cases[i], test_cases[-1 - i]
+        print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
 
     # print("\nPDF - method count_connected_components() example 1")
     # print("---------------------------------------------------")

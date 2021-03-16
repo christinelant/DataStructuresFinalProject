@@ -1,7 +1,7 @@
 # Course: CS261 - Data Structures
-# Author:
-# Assignment:
-# Description:
+# Author: Christine Lantigua
+# Assignment: 6
+# Description: Directed Graph methods created from scratch
 
 class DirectedGraph:
     """
@@ -52,8 +52,17 @@ class DirectedGraph:
 
     def add_vertex(self) -> int:
         """
-        TODO: Write this implementation
+        Method adds a new vertex to the graph. Vertex name does not need to be provided, instead
+        vertex will be assigned to a reference index (int).
         """
+
+        if len(self.adj_matrix) == 0:
+            self.adj_matrix[0] = 0
+
+        else:
+            current_number = len(self.adj_matrix)
+            self.adj_matrix[current_index - 1] = current_index
+
         pass
 
     def add_edge(self, src: int, dst: int, weight=1) -> None:
