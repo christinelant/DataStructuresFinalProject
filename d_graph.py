@@ -114,17 +114,34 @@ class DirectedGraph:
 
         Each edge is returned as a tuple of two incident vertex indices and weight
 
-        first el = source vertex
-        second el = destination vertex
+        first el = source vertex (row)
+        second el = destination vertex (col)
         third el = weight
         """
 
+        #get the vertices (0-len of v_count)
         vertices = self.get_vertices()
+
+        # create an empty list and start destination at 0
         edges = []
+        destination = 0
 
-        for vertex in vertices:
-            print(vertex)
+        # grab the row
+        for src in vertices:
+            # grab the col
+            for weight in self.adj_matrix[src]:
 
+                # where weight != 0, append the respective values
+                if weight != 0:
+                    edges.append((src, destination, weight))
+
+                # add one to the col
+                destination += 1
+
+            # reset col to 0 once we reach a new row
+            destination = 0
+
+        return edges
 
     def is_valid_path(self, path: []) -> bool:
         """
