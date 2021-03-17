@@ -74,7 +74,7 @@ class DirectedGraph:
         # src or dst is equal to one another or >= the graph
         if src >= self.v_count or src < 0: return
 
-        if dst >= self.v_count or dst < 0:return
+        if dst >= self.v_count or dst < 0: return
 
         if src == dst: return
 
@@ -105,7 +105,7 @@ class DirectedGraph:
         This method returns a list of vertices of the graph.
         """
 
-        #empty list to add vertices into
+        # empty list to add vertices into
         vertices = []
 
         # loop through range of v_count to append values from 0 - self.v_count
@@ -125,7 +125,7 @@ class DirectedGraph:
         third el = weight
         """
 
-        #get the vertices (0-len of v_count)
+        # get the vertices (0-len of v_count)
         vertices = self.get_vertices()
 
         # create an empty list and start destination at 0
@@ -151,10 +151,53 @@ class DirectedGraph:
 
     def is_valid_path(self, path: []) -> bool:
         """
-        TODO: Write this implementation
+        This method takes a list of vertex indices and returns True if the
+        sequence of vertices represents a valid path in the graph (so one can travel from the first vertex
+        in the list to the last vertex in the list, at each step traversing over an edge in the graph)
         """
 
-        pass
+        length_of_path = len(path) - 1
+        counter = 0
+
+        # empty path is automatically true
+        if length_of_path == 0:
+            return True
+
+        # path has one value
+        if length_of_path == 1 and path[0] in self.get_vertices():
+            return True
+
+        next_tuple_val = path[counter]
+        next_path_val = path[counter+1]
+
+        for num in path:
+            for tuple_value in self.get_edges():
+
+                #
+                #
+                # continue to second iteration
+                if next_tuple_val == path[counter]:
+                    next_tuple_val = tuple_value[1]
+                    break
+                #
+                #
+                #
+
+                # first index in tuple is equal to num we're searching for in path
+                if tuple_value[counter] == num:
+
+                    if next_tuple_val == tuple_value[counter]:
+                        next_tuple_val = tuple_value[1]
+                        break
+                    else:
+                        return False
+
+                # reached end of path
+                if length_of_path == 0 and num == next_tuple_val:
+                    return True
+
+            length_of_path -= 1
+
 
     def dfs(self, v_start, v_end=None) -> []:
         """
@@ -197,15 +240,14 @@ if __name__ == '__main__':
     #     g.add_edge(src, dst, weight)
     # print(g)
 
-    print("\nPDF - method get_edges() example 1")
-    print("----------------------------------")
-    g = DirectedGraph()
-    print(g.get_edges(), g.get_vertices(), sep='\n')
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    print(g.get_edges(), g.get_vertices(), sep='\n')
-
+    # print("\nPDF - method get_edges() example 1")
+    # print("----------------------------------")
+    # g = DirectedGraph()
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
+    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    # g = DirectedGraph(edges)
+    # print(g.get_edges(), g.get_vertices(), sep='\n')
 
     print("\nPDF - method is_valid_path() example 1")
     print("--------------------------------------")
