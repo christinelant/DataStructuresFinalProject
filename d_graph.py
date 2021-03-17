@@ -56,9 +56,13 @@ class DirectedGraph:
         instead vertex will be assigned to a reference index (int).
         """
 
-        self.adj_matrix.append(self.v_count)
-
+        # add one to self.v_count
         self.v_count += 1
+        self.adj_matrix.append([0] * (self.v_count))
+
+        # append value to matrix within the range of count
+        for i in range(self.v_count - 1):
+            self.adj_matrix[i].append(0)
 
         return self.v_count
 
@@ -66,6 +70,15 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
+
+        # src or dst is equal to one another or >= the graph count
+        if src >= self.v_count or dst >= self.v_count or src == dst: return
+
+        # weight is not a positive integer
+        if weight <= 0: return
+
+        self.adj_matrix[src][dst] = weight
+
         pass
 
     def remove_edge(self, src: int, dst: int) -> None:
@@ -132,7 +145,6 @@ if __name__ == '__main__':
     for src, dst, weight in edges:
         g.add_edge(src, dst, weight)
     print(g)
-
 
     # print("\nPDF - method get_edges() example 1")
     # print("----------------------------------")
