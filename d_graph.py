@@ -278,19 +278,18 @@ class DirectedGraph:
 
         # check_vertex is not empty
         while check_vertex:
-            vertex = check_vertex.pop()
+            vertex = check_vertex.popleft()
 
             # values exist within key and key is not yet in visited
             if vertex not in visited:
 
                 # grab each edge associated with value
                 for edge in edges:
-                    if edge[0] == vertex:
+                    if edge[0] == vertex and edge[0] not in visited:
                         vertex_edges.append(edge[1])
 
                     # sort the key's values in reverse sorted order
                 vertex_edges.sort()
-                vertex_edges.reverse()
 
                 # add this list onto the check_these_vertices list
                 check_vertex.extend(vertex_edges)
