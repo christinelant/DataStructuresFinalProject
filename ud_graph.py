@@ -319,7 +319,7 @@ class UndirectedGraph:
             return False
 
         for index in range(0, len(vertices)):
-            has_cycle = self.dfs(vertices[idx], None, True)
+            has_cycle = self.dfs(vertices[index], None, True)
 
             if has_cycle:
                 return True
