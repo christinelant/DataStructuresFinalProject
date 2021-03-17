@@ -156,37 +156,40 @@ class DirectedGraph:
         in the list to the last vertex in the list, at each step traversing over an edge in the graph)
         """
 
-        length_of_path = len(path) - 1
-        counter = 0
+        length_of_path = len(path)
 
         # empty path is automatically true
         if length_of_path == 0:
             return True
 
-        # path has one value
+        # path has one value, check if that value exists within vertices before returning True
         if length_of_path == 1 and path[0] in self.get_vertices():
             return True
 
-        find_this_number = path[1]
+        # grab the list of edges
+        edges = self.get_edges()
 
-        for index in range(0, len(path)):
-            for tuple_value in self.get_edges():
+        # loop through each index of path
+        for index in range(0, length_of_path - 1):
 
-                # reached end of path
-                if length_of_path == 0 and path[index] == find_this_number:
-                    return True
+            vertex_to_look_for = path[index]
+            found_match = False
 
-                # first index in tuple is equal to num we're searching for in path
-                        # tuple is at 4   num is at 4
-                if tuple_value[0] == path[index] and tuple_value[1] == path[index + 1]:
+            # loop through each edge tuple within edges list
+            for edge in edges:
+                v, e, w = edge[0], edge[1], edge[2]
 
-                    if find_this_number == tuple_value[counter] and path[index+1] == tuple_value[1]:
-                        find_this_number = tuple_value[1]
+                # vertex within tuple matches the vertex we're looking for
+                if v == vertex_to_look_for:
 
-            length_of_path -= 1
+                    # edge matches the next index to look for within path
+                    if e == path[index + 1]:
+                        found_match = True
 
-        return False
+            if not found_match:
+                return False
 
+        return True
 
     def dfs(self, v_start, v_end=None) -> []:
         """
