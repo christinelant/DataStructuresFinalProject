@@ -58,7 +58,7 @@ class DirectedGraph:
 
         # add one to self.v_count
         self.v_count += 1
-        self.adj_matrix.append([0] * (self.v_count))
+        self.adj_matrix.append([0] * self.v_count)
 
         # append value to matrix within the range of count
         for i in range(self.v_count - 1):

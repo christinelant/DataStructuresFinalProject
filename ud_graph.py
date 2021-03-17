@@ -199,7 +199,7 @@ class UndirectedGraph:
             else:
                 return True
 
-    def dfs(self, v_start, v_end=None) -> []:
+    def dfs(self, v_start, v_end=None, check_for_cycle=False) -> []:
         """
         Return list of vertices visited during DFS search
         Vertices are picked in alphabetical order
@@ -229,6 +229,10 @@ class UndirectedGraph:
                 # add this list onto the check_these_vertices list
                 check_these_vertices.extend(key_edges)
 
+                if check_for_cycle:
+                    if any(check_these_vertices.count(x) > 1 for x in check_these_vertices):
+                        return True
+
             # add key to visited set and append it to the output list
             if key not in visited:
                 visited.add(key)
@@ -237,6 +241,9 @@ class UndirectedGraph:
             # if v_end exists and v_end is in visited, return output_list
             if v_end and v_end in visited:
                 return output_list
+
+        if check_for_cycle:
+            return False
 
         return output_list
 
@@ -306,6 +313,18 @@ class UndirectedGraph:
         Return True if graph contains a cycle, False otherwise
         """
 
+        vertices = self.get_vertices()
+
+        if len(vertices) < 3:
+            return False
+
+        for index in range(0, len(vertices)):
+            has_cycle = self.dfs(vertices[idx], None, True)
+
+            if has_cycle:
+                return True
+
+        return False
 
 if __name__ == '__main__':
     # print("\nPDF - method add_vertex() / add_edge example 1")
@@ -371,34 +390,34 @@ if __name__ == '__main__':
     #     v1, v2 = test_cases[i], test_cases[-1 - i]
     #     print(f'{v1}-{v2} DFS:{g.dfs(v1, v2)} BFS:{g.bfs(v1, v2)}')
 
-    print("\nPDF - method count_connected_components() example 1")
-    print("---------------------------------------------------")
-    edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
-    g = UndirectedGraph(edges)
-    test_cases = (
-        'add QH', 'remove FG', 'remove GQ', 'remove HQ',
-        'remove AE', 'remove CA', 'remove EB', 'remove CE', 'remove DE',
-        'remove BC', 'add EA', 'add EF', 'add GQ', 'add AC', 'add DQ',
-        'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG')
-    for case in test_cases:
-        command, edge = case.split()
-        u, v = edge
-        g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
-        print(g.count_connected_components(), end=' ')
-    print()
-
-    # print("\nPDF - method has_cycle() example 1")
-    # print("----------------------------------")
+    # print("\nPDF - method count_connected_components() example 1")
+    # print("---------------------------------------------------")
     # edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
     # g = UndirectedGraph(edges)
     # test_cases = (
     #     'add QH', 'remove FG', 'remove GQ', 'remove HQ',
     #     'remove AE', 'remove CA', 'remove EB', 'remove CE', 'remove DE',
     #     'remove BC', 'add EA', 'add EF', 'add GQ', 'add AC', 'add DQ',
-    #     'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG',
-    #     'add FG', 'remove GE')
+    #     'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG')
     # for case in test_cases:
     #     command, edge = case.split()
     #     u, v = edge
     #     g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
-    #     print('{:<10}'.format(case), g.has_cycle())
+    #     print(g.count_connected_components(), end=' ')
+    # print()
+
+    print("\nPDF - method has_cycle() example 1")
+    print("----------------------------------")
+    edges = ['AE', 'AC', 'BE', 'CE', 'CD', 'CB', 'BD', 'ED', 'BH', 'QG', 'FG']
+    g = UndirectedGraph(edges)
+    test_cases = (
+        'add QH', 'remove FG', 'remove GQ', 'remove HQ',
+        'remove AE', 'remove CA', 'remove EB', 'remove CE', 'remove DE',
+        'remove BC', 'add EA', 'add EF', 'add GQ', 'add AC', 'add DQ',
+        'add EG', 'add QH', 'remove CD', 'remove BD', 'remove QG',
+        'add FG', 'remove GE')
+    for case in test_cases:
+        command, edge = case.split()
+        u, v = edge
+        g.add_edge(u, v) if command == 'add' else g.remove_edge(u, v)
+        print('{:<10}'.format(case), g.has_cycle())
