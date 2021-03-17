@@ -223,14 +223,16 @@ class DirectedGraph:
 
                 # grab each edge associated with value
                 for edge in edges:
-                    if edge[0] == vertex:
+                    if edge[0] == vertex and edge[0] not in visited:
                         vertex_edges.append(edge[1])
+                        continue
                     # sort the key's values in reverse sorted order
-                    vertex_edges.sort()
-                    vertex_edges.reverse()
+                vertex_edges.sort()
+                vertex_edges.reverse()
 
-                    # add this list onto the check_these_vertices list
-                    check_vertex.extend(vertex_edges)
+                # add this list onto the check_these_vertices list
+                check_vertex.extend(vertex_edges)
+                vertex_edges = []
 
                 # if check_for_cycle:
                 #     if any(check_vertex.count(x) > 1 for x in check_vertex):
