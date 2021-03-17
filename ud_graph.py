@@ -205,7 +205,7 @@ class UndirectedGraph:
         Vertices are picked in alphabetical order
         """
 
-        #initiate empty set and two empty lists
+        # initiate empty set and two empty lists
         visited = set()
         check_these_vertices = [v_start]
         output_list = []
@@ -240,15 +240,49 @@ class UndirectedGraph:
 
         return output_list
 
-
     def bfs(self, v_start, v_end=None) -> []:
         """
         Return list of vertices visited during BFS search
         Vertices are picked in alphabetical order
         """
-        empty_list = []
+        # initiate empty set and two empty lists
+        visited = set()
+        check_these_vertices = deque()
+        check_these_vertices.append(v_start)
+        output_list = []
 
-        return empty_list
+        # element is not within graph
+        if v_start not in self.adj_list:
+            return output_list
+
+        # check_these_vertices is not empty
+        while check_these_vertices:
+
+            # do not need to reverse this search because we are popping starting from the left
+            key = check_these_vertices.popleft()
+
+            # values exist within key and key is not yet in visited
+            if len(self.adj_list[key]) > 0 and key not in visited:
+                key_edges = self.adj_list[key]
+
+                # sort the key's values in lexiographical order
+                key_edges.sort()
+
+                for item in key_edges:
+
+                    # add this list onto the check_these_vertices list
+                    check_these_vertices.append(item)
+
+            # add key to visited set and append it to the output list
+            if key not in visited:
+                visited.add(key)
+                output_list.append(key)
+
+            # if v_end exists and v_end is in visited, return output_list
+            if v_end and v_end in visited:
+                return output_list
+
+        return output_list
 
     def count_connected_components(self):
         """
