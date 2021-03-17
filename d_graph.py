@@ -3,6 +3,9 @@
 # Assignment: 6
 # Description: Directed Graph methods created from scratch
 
+import heapq
+from collections import deque
+
 class DirectedGraph:
     """
     Class to implement directed weighted graph
@@ -199,7 +202,10 @@ class DirectedGraph:
 
     def dfs(self, v_start, v_end=None) -> []:
         """
-        TODO: Write this implementation
+        Method preforms a depth-first-search (DFS) in the graph and returns a list of vertices
+        visited during the search in the order they were visited
+
+        It takes one required parameter index of the vertex from which starts the search from that point
         """
         # initiate empty set and two empty lists
         visited = set()
@@ -225,7 +231,7 @@ class DirectedGraph:
                 for edge in edges:
                     if edge[0] == vertex and edge[0] not in visited:
                         vertex_edges.append(edge[1])
-                        continue
+
                     # sort the key's values in reverse sorted order
                 vertex_edges.sort()
                 vertex_edges.reverse()
@@ -256,7 +262,49 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+        # initiate empty set and two empty lists
+        visited = set()
+        check_vertex = deque()
+        check_vertex.append(v_start)
+        output_list = []
+        vertex_edges = []
+        vertex_list = self.get_vertices()
+
+        # element is not within graph
+        if v_start not in vertex_list:
+            return output_list
+
+        edges = self.get_edges()
+
+        # check_vertex is not empty
+        while check_vertex:
+            vertex = check_vertex.pop()
+
+            # values exist within key and key is not yet in visited
+            if vertex not in visited:
+
+                # grab each edge associated with value
+                for edge in edges:
+                    if edge[0] == vertex:
+                        vertex_edges.append(edge[1])
+
+                    # sort the key's values in reverse sorted order
+                vertex_edges.sort()
+                vertex_edges.reverse()
+
+                # add this list onto the check_these_vertices list
+                check_vertex.extend(vertex_edges)
+
+            # add key to visited set and append it to the output list
+            if vertex not in visited:
+                visited.add(vertex)
+                output_list.append(vertex)
+
+            # if v_end exists and v_end is in visited, return output_list
+            if v_end and v_end in visited:
+                return output_list
+
+        return output_list
 
     def has_cycle(self):
         """
