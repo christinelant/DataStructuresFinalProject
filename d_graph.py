@@ -72,7 +72,11 @@ class DirectedGraph:
         """
 
         # src or dst is equal to one another or >= the graph
-        if src >= self.v_count or dst >= self.v_count or src == dst: return
+        if src >= self.v_count or src < 0: return
+
+        if dst >= self.v_count or dst < 0:return
+
+        if src == dst: return
 
         # weight is not a positive integer
         if weight <= 0: return
@@ -87,7 +91,9 @@ class DirectedGraph:
         """
 
         # does not exist on graph
-        if src >= self.v_count or dst >= self.v_count: return
+        if src >= self.v_count or src < 0: return
+
+        if dst >= self.v_count or dst < 0: return
 
         # change the weight to 0 at specified matrix position
         self.adj_matrix[src][dst] = 0
