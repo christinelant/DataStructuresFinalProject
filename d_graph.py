@@ -72,14 +72,18 @@ class DirectedGraph:
         """
 
         # src or dst is equal to one another or >= the graph
-        if src >= self.v_count or src < 0: return
+        if src >= self.v_count or src < 0:
+            return
 
-        if dst >= self.v_count or dst < 0: return
+        if dst >= self.v_count or dst < 0:
+            return
 
-        if src == dst: return
+        if src == dst:
+            return
 
         # weight is not a positive integer
-        if weight <= 0: return
+        if weight <= 0:
+            return
 
         self.adj_matrix[src][dst] = weight
 
@@ -91,9 +95,11 @@ class DirectedGraph:
         """
 
         # does not exist on graph
-        if src >= self.v_count or src < 0: return
+        if src >= self.v_count or src < 0:
+            return
 
-        if dst >= self.v_count or dst < 0: return
+        if dst >= self.v_count or dst < 0:
+            return
 
         # change the weight to 0 at specified matrix position
         self.adj_matrix[src][dst] = 0
@@ -195,7 +201,54 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+        # initiate empty set and two empty lists
+        visited = set()
+        check_vertex = [v_start]
+        output_list = []
+        vertex_edges = []
+        vertex_list = self.get_vertices()
+
+        # element is not within graph
+        if v_start not in vertex_list:
+            return output_list
+
+        edges = self.get_edges()
+
+        # check_vertex is not empty
+        while check_vertex:
+            vertex = check_vertex.pop()
+
+            # values exist within key and key is not yet in visited
+            if vertex not in visited and vertex in vertex_list:
+
+                # grab each edge associated with value
+                for edge in edges:
+                    if edge[0] == vertex:
+                        vertex_edges.append(edge[1])
+                    # sort the key's values in reverse sorted order
+                    vertex_edges.sort()
+                    vertex_edges.reverse()
+
+                    # add this list onto the check_these_vertices list
+                    check_vertex.extend(vertex_edges)
+
+                # if check_for_cycle:
+                #     if any(check_vertex.count(x) > 1 for x in check_vertex):
+                #         return True
+
+            # add key to visited set and append it to the output list
+            if vertex not in visited:
+                visited.add(vertex)
+                output_list.append(vertex)
+
+            # if v_end exists and v_end is in visited, return output_list
+            if v_end and v_end in visited:
+                return output_list
+
+        # if check_for_cycle:
+        #     return False
+
+        return output_list
 
     def bfs(self, v_start, v_end=None) -> []:
         """
@@ -241,23 +294,23 @@ if __name__ == '__main__':
     # g = DirectedGraph(edges)
     # print(g.get_edges(), g.get_vertices(), sep='\n')
 
-    print("\nPDF - method is_valid_path() example 1")
-    print("--------------------------------------")
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
-    for path in test_cases:
-        print(path, g.is_valid_path(path))
-
-    #
-    # print("\nPDF - method dfs() and bfs() example 1")
+    # print("\nPDF - method is_valid_path() example 1")
     # print("--------------------------------------")
     # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
     #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
     # g = DirectedGraph(edges)
-    # for start in range(5):
-    #     print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
+    # test_cases = [[0, 1, 4, 3], [1, 3, 2, 1], [0, 4], [4, 0], [], [2]]
+    # for path in test_cases:
+    #     print(path, g.is_valid_path(path))
+
+    #
+    print("\nPDF - method dfs() and bfs() example 1")
+    print("--------------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for start in range(5):
+        print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
     #
     #
     # print("\nPDF - method has_cycle() example 1")
