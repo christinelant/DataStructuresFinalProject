@@ -167,36 +167,25 @@ class DirectedGraph:
         if length_of_path == 1 and path[0] in self.get_vertices():
             return True
 
-        next_tuple_val = path[counter]
-        next_path_val = path[counter+1]
+        find_this_number = path[1]
 
-        for num in path:
+        for index in range(0, len(path)):
             for tuple_value in self.get_edges():
 
-                #
-                #
-                # continue to second iteration
-                if next_tuple_val == path[counter]:
-                    next_tuple_val = tuple_value[1]
-                    break
-                #
-                #
-                #
-
-                # first index in tuple is equal to num we're searching for in path
-                if tuple_value[counter] == num:
-
-                    if next_tuple_val == tuple_value[counter]:
-                        next_tuple_val = tuple_value[1]
-                        break
-                    else:
-                        return False
-
                 # reached end of path
-                if length_of_path == 0 and num == next_tuple_val:
+                if length_of_path == 0 and path[index] == find_this_number:
                     return True
 
+                # first index in tuple is equal to num we're searching for in path
+                        # tuple is at 4   num is at 4
+                if tuple_value[0] == path[index] and tuple_value[1] == path[index + 1]:
+
+                    if find_this_number == tuple_value[counter] and path[index+1] == tuple_value[1]:
+                        find_this_number = tuple_value[1]
+
             length_of_path -= 1
+
+        return False
 
 
     def dfs(self, v_start, v_end=None) -> []:
