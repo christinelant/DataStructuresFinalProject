@@ -230,12 +230,12 @@ class DirectedGraph:
 
                 # grab each edge associated with value
                 for edge in edges:
-                    if edge[0] == vertex and edge[1] not in visited:
+                    if edge[0] == vertex:
                         vertex_edges.append(edge[1])
 
                     # sort the key's values in reverse sorted order
-                vertex_edges.sort()
-                vertex_edges.reverse()
+                        vertex_edges.sort()
+                        vertex_edges.reverse()
 
                 # add this list onto the check_these_vertices list
                 check_vertex.extend(vertex_edges)
@@ -307,24 +307,34 @@ class DirectedGraph:
 
         return output_list
 
+    def make_graph_dict(self):
+        """makes the graph into a dictionary with keys and values"""
+        graph_dict = dict()
+
+        edges = self.get_edges()
+
+        for edge in edges:
+            key, val = edge[0], edge[1]
+
+            graph_dict[key] = val
+
+        return graph_dict
+
     def has_cycle(self):
         """
-        TODO: Write this implementation
+        This method returns True if there is at least one cycle in the graph. If the graph is acyclic,
+        the method returns False.
         """
-        vertices = self.get_vertices()
 
-        if len(vertices) < 3:
-            return False
+        for index in range(0, len(self.get_vertices())):
+            has_cycle = self.dfs(self.get_vertices()[index], None, True)
 
-        for index in range(0, len(vertices)):
-            has_cycle = self.dfs(vertices[index], None, True)
-
-            if has_cycle:
+            if has_cycle is True:
                 return True
 
         return False
 
-    def find_minimum(self, weight, output_list):
+    def __find_minimum(self, weight, output_list):
         """
         helper function for dijkstra's algorithm
 
@@ -341,8 +351,7 @@ class DirectedGraph:
             # check if distance of specified number is less than the current minimum value
             # and the current slot is empty
             if weight[number] < min_val and output_list[number] is False:
-
-               # reassign minimum values
+                # reassign minimum values
                 min_val = weight[number]
                 min_index = number
 
@@ -359,6 +368,9 @@ class DirectedGraph:
 
         **utilized help from geeks for geeks to put this algorithm together
         https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
+
+        ** tried to add as many notes as possible to make sure i understood what was going on with
+        the help from geeksforgeeks
         """
 
         # set each value to numbers outside of src value to be reassigned to infinity later
@@ -371,7 +383,7 @@ class DirectedGraph:
         for each_num in range(self.v_count):
 
             # determine the vertex within the list with the least amount of weight (shortest path)
-            min_vertex = self.find_minimum(dist, shortest_path)
+            min_vertex = self.__find_minimum(dist, shortest_path)
 
             # place the value within the shortest path tree by replacing the false value with true
             shortest_path[min_vertex] = True
@@ -384,7 +396,6 @@ class DirectedGraph:
 
                     # no value currently assigned in shortest path, distance of index is greater than curr min vertex
                     if shortest_path[index] is False and dist[index] > (dist[min_vertex] + vertex):
-
                         # update the distance value
                         dist[index] = dist[min_vertex] + vertex
 
@@ -459,14 +470,14 @@ if __name__ == '__main__':
     print('\n', g)
     #
     #
-    print("\nPDF - dijkstra() example 1")
-    print("--------------------------")
-    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    g = DirectedGraph(edges)
-    for i in range(5):
-        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
-    g.remove_edge(4, 3)
-    print('\n', g)
-    for i in range(5):
-        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    # print("\nPDF - dijkstra() example 1")
+    # print("--------------------------")
+    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    # g = DirectedGraph(edges)
+    # for i in range(5):
+    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    # g.remove_edge(4, 3)
+    # print('\n', g)
+    # for i in range(5):
+    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
