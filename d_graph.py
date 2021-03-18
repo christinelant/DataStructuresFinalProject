@@ -6,6 +6,7 @@
 import heapq
 from collections import deque
 
+
 class DirectedGraph:
     """
     Class to implement directed weighted graph
@@ -200,7 +201,7 @@ class DirectedGraph:
 
         return True
 
-    def dfs(self, v_start, v_end=None) -> []:
+    def dfs(self, v_start, v_end=None, check_for_cycle=False) -> []:
         """
         Method preforms a depth-first-search (DFS) in the graph and returns a list of vertices
         visited during the search in the order they were visited
@@ -225,11 +226,11 @@ class DirectedGraph:
             vertex = check_vertex.pop()
 
             # values exist within key and key is not yet in visited
-            if vertex not in visited and vertex in vertex_list:
+            if vertex not in visited:
 
                 # grab each edge associated with value
                 for edge in edges:
-                    if edge[0] == vertex and edge[0] not in visited:
+                    if edge[0] == vertex and edge[1] not in visited:
                         vertex_edges.append(edge[1])
 
                     # sort the key's values in reverse sorted order
@@ -240,9 +241,10 @@ class DirectedGraph:
                 check_vertex.extend(vertex_edges)
                 vertex_edges = []
 
-                # if check_for_cycle:
-                #     if any(check_vertex.count(x) > 1 for x in check_vertex):
-                #         return True
+                if check_for_cycle:
+                    for value in check_vertex:
+                        if value in visited:
+                            return True
 
             # add key to visited set and append it to the output list
             if vertex not in visited:
@@ -253,8 +255,8 @@ class DirectedGraph:
             if v_end and v_end in visited:
                 return output_list
 
-        # if check_for_cycle:
-        #     return False
+        if check_for_cycle:
+            return False
 
         return output_list
 
@@ -309,13 +311,90 @@ class DirectedGraph:
         """
         TODO: Write this implementation
         """
-        pass
+        vertices = self.get_vertices()
+
+        if len(vertices) < 3:
+            return False
+
+        for index in range(0, len(vertices)):
+            has_cycle = self.dfs(vertices[index], None, True)
+
+            if has_cycle:
+                return True
+
+        return False
+
+    def find_minimum(self, weight, output_list):
+        """
+        helper function for dijkstra's algorithm
+
+        method returns the index with the lowest weight
+        """
+
+        # initialize minimum values
+        min_index = 0
+        min_val = 2147483646  # infinity
+
+        # loop through each index in self.v_counter until absolute minimum value reached
+        for number in range(self.v_count):
+
+            # check if distance of specified number is less than the current minimum value
+            # and the current slot is empty
+            if weight[number] < min_val and output_list[number] is False:
+
+               # reassign minimum values
+                min_val = weight[number]
+                min_index = number
+
+        return min_index
 
     def dijkstra(self, src: int) -> []:
         """
-        TODO: Write this implementation
+        This method implements the Dijkstra algorithm to compute the length of the shortest path
+        from a given vertex to all other vertices in the graph. It returns a list with one value per
+        each vertex in the graph, where value at index 0 is the length of the shortest path from
+        vertex SRC to vertex 0, value at index 1 is the length of the shortest path from vertex SRC
+        to vertex 1 etc. If a certain vertex is not reachable from SRC, returned value should be
+        INFINITY (in Python, use float(‘inf’)).
+
+        **utilized help from geeks for geeks to put this algorithm together
+        https://www.geeksforgeeks.org/dijkstras-shortest-path-algorithm-greedy-algo-7/
         """
-        pass
+
+        # set each value to numbers outside of src value to be reassigned to infinity later
+        dist = [2147483646] * self.v_count
+
+        # set the first value equal to 0 and create shortest path list with iterations of false
+        dist[src] = 0
+        shortest_path = [False] * self.v_count
+
+        for each_num in range(self.v_count):
+
+            # determine the vertex within the list with the least amount of weight (shortest path)
+            min_vertex = self.find_minimum(dist, shortest_path)
+
+            # place the value within the shortest path tree by replacing the false value with true
+            shortest_path[min_vertex] = True
+
+            for index in range(self.v_count):
+                vertex = self.adj_matrix[min_vertex][index]
+
+                # past the first index
+                if vertex > 0:
+
+                    # no value currently assigned in shortest path, distance of index is greater than curr min vertex
+                    if shortest_path[index] is False and dist[index] > (dist[min_vertex] + vertex):
+
+                        # update the distance value
+                        dist[index] = dist[min_vertex] + vertex
+
+        # reassign value of 2147483646 to float of inf as it could not be assigned initially
+        # before returning dist
+        for index in range(0, len(dist)):
+            if dist[index] == 2147483646:
+                dist[index] = float('inf')
+
+        return dist
 
 
 if __name__ == '__main__':
@@ -362,32 +441,32 @@ if __name__ == '__main__':
         print(f'{start} DFS:{g.dfs(start)} BFS:{g.bfs(start)}')
     #
     #
-    # print("\nPDF - method has_cycle() example 1")
-    # print("----------------------------------")
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # g = DirectedGraph(edges)
+    print("\nPDF - method has_cycle() example 1")
+    print("----------------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+
+    edges_to_remove = [(3, 1), (4, 0), (3, 2)]
+    for src, dst in edges_to_remove:
+        g.remove_edge(src, dst)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
+
+    edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
+    for src, dst in edges_to_add:
+        g.add_edge(src, dst)
+        print(g.get_edges(), g.has_cycle(), sep='\n')
+    print('\n', g)
     #
-    # edges_to_remove = [(3, 1), (4, 0), (3, 2)]
-    # for src, dst in edges_to_remove:
-    #     g.remove_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
     #
-    # edges_to_add = [(4, 3), (2, 3), (1, 3), (4, 0)]
-    # for src, dst in edges_to_add:
-    #     g.add_edge(src, dst)
-    #     print(g.get_edges(), g.has_cycle(), sep='\n')
-    # print('\n', g)
-    #
-    #
-    # print("\nPDF - dijkstra() example 1")
-    # print("--------------------------")
-    # edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
-    #          (3, 1, 5), (2, 1, 23), (3, 2, 7)]
-    # g = DirectedGraph(edges)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
-    # g.remove_edge(4, 3)
-    # print('\n', g)
-    # for i in range(5):
-    #     print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    print("\nPDF - dijkstra() example 1")
+    print("--------------------------")
+    edges = [(0, 1, 10), (4, 0, 12), (1, 4, 15), (4, 3, 3),
+             (3, 1, 5), (2, 1, 23), (3, 2, 7)]
+    g = DirectedGraph(edges)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
+    g.remove_edge(4, 3)
+    print('\n', g)
+    for i in range(5):
+        print(f'DIJKSTRA {i} {g.dijkstra(i)}')
